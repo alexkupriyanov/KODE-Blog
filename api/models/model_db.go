@@ -26,7 +26,7 @@ func init() {
 
 	dbUri := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=true", username, password, dbHost, dbName)
 	conn, err := gorm.Open(dbType, dbUri)
-	for i := 0; err != nil && i < 5; i++ {
+	for i := 0; err != nil && i < 10; i++ {
 		time.Sleep(1 * time.Second)
 		conn, err = gorm.Open(dbType, dbUri)
 	}
