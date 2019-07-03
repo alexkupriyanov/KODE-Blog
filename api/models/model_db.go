@@ -44,6 +44,11 @@ func init() {
 		os.Exit(4060)
 	}
 	db.Debug().AutoMigrate(&User{}, &Media{}, &Message{}, &Link{}, &Like{})
+	var c int
+	db.Model(&User{}).Count(&c)
+	if c == 0 {
+		db.Create(&User{Username: "admin", Password: getMD5Hash("admin")})
+	}
 }
 
 func GetDB() *gorm.DB {

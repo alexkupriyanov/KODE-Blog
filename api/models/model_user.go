@@ -17,16 +17,12 @@ type User struct {
 	ID       uint   `gorm:"primary_key"`
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Role     string `json:"role,omitempty"`
 	Token    string `json:"token"`
 }
 
 func (u *User) Create() map[string]interface{} {
 	if u.Username == "" || u.Password == "" {
 		return utils.Message(false, "Username or password are empty")
-	}
-	if u.Role != "admin" {
-		u.Role = "user"
 	}
 	var user User
 	GetDB().First(&user, User{Username: u.Username})
