@@ -1,10 +1,10 @@
 package models
 
 import (
-	"KODE-Blog/api/utils"
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
+	"github.com/alexkupriyanov/KODE-Blog/api/utils"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"

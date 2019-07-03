@@ -1,8 +1,8 @@
 package models
 
 import (
-	"KODE-Blog/api/utils"
 	"fmt"
+	"github.com/alexkupriyanov/KODE-Blog/api/utils"
 	"github.com/badoux/goscraper"
 	"github.com/joho/godotenv"
 	"io/ioutil"

@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"KODE-Blog/api/models"
-	"KODE-Blog/api/utils"
 	"encoding/json"
+	"github.com/alexkupriyanov/KODE-Blog/api/models"
+	"github.com/alexkupriyanov/KODE-Blog/api/utils"
 	"net/http"
 	"strings"
 )

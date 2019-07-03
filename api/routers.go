@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"KODE-Blog/api/controllers"
 	"fmt"
+	"github.com/alexkupriyanov/KODE-Blog/api/controllers"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strings"
@@ -36,6 +36,7 @@ func NewRouter() *mux.Router {
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	_, _ = fmt.Fprintf(w, "Hello World!")
+	_ = r
 }
 
 var routes = Routes{

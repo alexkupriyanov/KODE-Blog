@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"KODE-Blog/api/models"
-	"KODE-Blog/api/utils"
 	"encoding/json"
 	"fmt"
+	"github.com/alexkupriyanov/KODE-Blog/api/models"
+	"github.com/alexkupriyanov/KODE-Blog/api/utils"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
