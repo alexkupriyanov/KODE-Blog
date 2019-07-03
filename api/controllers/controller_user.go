@@ -36,7 +36,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
-	if r.Header.Get("Authorization") != "" {
+	if r.Header.Get("Authorization") == "" {
 		http.Error(w, "Can't get authorization token", http.StatusUnauthorized)
 		return
 	}
