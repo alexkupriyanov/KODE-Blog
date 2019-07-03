@@ -90,7 +90,7 @@ func DeleteMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	token := strings.Split(r.Header.Get("Authorization"), " ")[1]
-	err := auth.CheckToken(message.Author.Token, r)
+	err := auth.CheckToken(token, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusForbidden)
 		return
@@ -123,7 +123,7 @@ func Like(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "You are not authorized", http.StatusUnauthorized)
 		return
 	}
-	err := auth.CheckToken(message.Author.Token, r)
+	err := auth.CheckToken(token, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusForbidden)
 		return
