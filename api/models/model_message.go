@@ -25,21 +25,21 @@ type Message struct {
 }
 
 type MessageViewListModel struct {
-	Id     uint              `json:"Id,omitempty"`
-	Author string            `json:"Author,omitempty"`
-	Text   string            `json:"Text,omitempty"`
-	Media  uint              `json:"MediaCount,omitempty"`
-	Link   LinkViewListModel `json:"Link,omitempty"`
-	Likes  int               `json:"Likes,omitempty"`
+	Id     uint              `json:"id,omitempty"`
+	Author string            `json:"author,omitempty"`
+	Text   string            `json:"text,omitempty"`
+	Media  uint              `json:"mediaCount,omitempty"`
+	Link   LinkViewListModel `json:"link,omitempty"`
+	Likes  int               `json:"likes,omitempty"`
 }
 
 type MessageViewDetailsModel struct {
-	Id     uint                 `json:"Id,omitempty"`
-	Author string               `json:"Author,omitempty"`
-	Text   string               `json:"Text,omitempty"`
-	Media  []MediaOutput        `json:"Media,omitempty"`
-	Link   LinkViewDetailsModel `json:"Link,omitempty"`
-	Likes  int                  `json:"Likes"`
+	Id     uint                 `json:"id,omitempty"`
+	Author string               `json:"author,omitempty"`
+	Text   string               `json:"text,omitempty"`
+	Media  []MediaOutput        `json:"media,omitempty"`
+	Link   LinkViewDetailsModel `json:"link,omitempty"`
+	Likes  int                  `json:"likes"`
 }
 
 type Like struct {

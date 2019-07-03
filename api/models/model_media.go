@@ -1,8 +1,8 @@
 package models
 
 type MediaOutput struct {
-	Id   uint   `json:"Id"`
-	Link string `json:"Link"`
+	Id   uint   `json:"id"`
+	Link string `json:"link"`
 }
 
 type Media struct {
