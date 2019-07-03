@@ -1,8 +1,8 @@
 package models
 
 import (
+	"errors"
 	"fmt"
-	"github.com/alexkupriyanov/KODE-Blog/api/utils"
 	"github.com/badoux/goscraper"
 	"github.com/joho/godotenv"
 	"io/ioutil"
@@ -47,13 +47,13 @@ type Like struct {
 	UserId    uint
 }
 
-func (m *Message) Create(r *http.Request) map[string]interface{} {
+func (m *Message) Create(r *http.Request) error {
 	if m.Link.Link == "" && m.Text == "" && len(m.Media) == 0 {
-		return utils.Message(false, "Empty post")
+		return errors.New("Empty post")
 	}
-	resp := m.Author.Get()
-	if resp["status"] == false {
-		return utils.Message(false, "Token malformed")
+	err := m.Author.Get()
+	if err != nil {
+		return errors.New("Token malformed")
 	}
 	m.AuthorID = m.Author.ID
 	m.Likes = 0
@@ -62,7 +62,7 @@ func (m *Message) Create(r *http.Request) map[string]interface{} {
 		link := Link{MessageID: m.Id, Link: m.Link.Link}
 		s, err := goscraper.Scrape(link.Link, 5)
 		if err != nil {
-			utils.Message(false, "Can't generate preview")
+			return errors.New("Can't generate preview")
 		}
 		link.Description = s.Preview.Description
 		if link.Description == "" {
@@ -98,26 +98,26 @@ func GetMessageList(page uint) []MessageViewListModel {
 	return result
 }
 
-func (m *Message) Details() map[string]interface{} {
+func (m *Message) Details() error {
 	GetDB().Preload("Link").Preload("Media").Preload("Author").First(&m)
 	if m.AuthorID <= 0 {
-		return utils.Message(false, "Message not found")
+		return errors.New("Message not found")
 	}
 	return nil
 }
 
-func (m *Message) Delete(token string) map[string]interface{} {
+func (m *Message) Delete(token string) error {
 	user := User{Token: token}
-	resp := user.Get()
-	if resp["status"] == false {
-		return utils.Message(false, "Malformed token")
+	err := user.Get()
+	if err != nil {
+		return errors.New("Malformed token")
 	}
 	GetDB().Preload("Link").Preload("Media").Preload("Author").First(&m)
 	if m.AuthorID <= 0 {
-		return utils.Message(false, "Message not found")
+		return errors.New("Message not found")
 	}
 	if m.AuthorID != user.ID {
-		return utils.Message(false, "You haven't permission for this action")
+		return errors.New("You haven't permission for this action")
 	}
 	for _, v := range m.Media {
 		GetDB().Delete(&v)
@@ -177,15 +177,15 @@ func (l *Link) ToDetailsModel() LinkViewDetailsModel {
 	return output
 }
 
-func (m *Message) Like(token string) map[string]interface{} {
+func (m *Message) Like(token string) error {
 	user := User{Token: token}
 	GetDB().First(&user)
 	if user.ID <= 0 {
-		return utils.Message(false, "Malformed token")
+		return errors.New("Malformed token")
 	}
 	GetDB().Preload("Link").Preload("Media").Preload("Author").First(&m)
 	if m.AuthorID == 0 {
-		return utils.Message(false, "Message not found")
+		return errors.New("Message not found")
 	}
 	var c int
 	GetDB().Model(&Like{}).Where("Message_id = ? AND User_id = ?", m.Id, user.ID).Count(&c)

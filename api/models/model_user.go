@@ -3,8 +3,8 @@ package models
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"fmt"
-	"github.com/alexkupriyanov/KODE-Blog/api/utils"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
@@ -20,24 +20,24 @@ type User struct {
 	Token    string `json:"token"`
 }
 
-func (u *User) Create() map[string]interface{} {
+func (u *User) Create() error {
 	if u.Username == "" || u.Password == "" {
-		return utils.Message(false, "Username or password are empty")
+		return errors.New("Username or password are empty")
 	}
 	var user User
 	GetDB().First(&user, User{Username: u.Username})
 	if user.ID > 0 {
-		return utils.Message(false, "User already exist")
+		return errors.New("User already exist")
 	}
 	u.Password = getMD5Hash(u.Password)
 	GetDB().Create(u)
 	if u.ID <= 0 {
-		return utils.Message(false, "Failed to create account, connection error")
+		return errors.New("Failed to create account, connection error")
 	}
-	return utils.Message(true, "Account created")
+	return nil
 }
 
-func (u *User) Login() map[string]interface{} {
+func (u *User) Login() (string,error) {
 	e := godotenv.Load()
 	if e != nil {
 		fmt.Print(e)
@@ -45,7 +45,7 @@ func (u *User) Login() map[string]interface{} {
 	var user User
 	GetDB().First(&user, User{Username: u.Username, Password: getMD5Hash(u.Password)})
 	if user.ID <= 0 {
-		return utils.Message(false, "User not found")
+		return "", errors.New("User not found")
 	}
 	tokenLifeTime := time.Now().Add(time.Hour * 24).Unix()
 	tk := jwt.StandardClaims{
@@ -55,24 +55,24 @@ func (u *User) Login() map[string]interface{} {
 	tokenString, _ := token.SignedString([]byte(os.Getenv("token_password")))
 	user.Token = tokenString //Store the token in the response
 	GetDB().Save(&user)
-	return map[string]interface{}{"token": user.Token}
+	return user.Token, nil
 }
 
-func (u *User) Logout() map[string]interface{} {
-	resp := u.Get()
-	if resp["status"] == false {
-		return resp
+func (u *User) Logout() error {
+	err := u.Get()
+	if err != nil{
+		return err
 	}
 	GetDB().Model(&u).Update("token", gorm.Expr("NULL"))
-	return map[string]interface{}{}
+	return nil
 }
 
-func (u *User) Get() map[string]interface{} {
+func (u *User) Get() error {
 	GetDB().First(&u, User{Token: u.Token})
 	if u.ID <= 0 {
-		return utils.Message(false, "User not found")
+		return errors.New("User not found")
 	}
-	return map[string]interface{}{}
+	return nil
 }
 
 func getMD5Hash(text string) string {

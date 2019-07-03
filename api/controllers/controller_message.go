@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/alexkupriyanov/KODE-Blog/api/auth"
 	"github.com/alexkupriyanov/KODE-Blog/api/models"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -16,13 +17,14 @@ func CreateMessage(w http.ResponseWriter, r *http.Request) {
 	message.Text = r.PostForm.Get("text")
 	message.Link.Link = r.PostForm.Get("link")
 	message.Author.Token = strings.Split(r.Header.Get("Authorization"), " ")[1]
-	if message.Author.Token == "" {
-		http.Error(w, "You are not authorized", http.StatusUnauthorized)
+	err := auth.CheckToken(message.Author.Token, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusForbidden)
 		return
 	}
-	resp := message.Create(r)
-	if resp["status"] == false {
-		http.Error(w, fmt.Sprint(resp["message"]), http.StatusBadRequest)
+	err = message.Create(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	e := json.NewEncoder(w).Encode(message.ToListModel())
@@ -55,9 +57,9 @@ func GetMessageDetails(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	message := models.Message{Id: uint(id)}
-	resp := message.Details()
-	if resp["status"] == false {
-		http.Error(w, fmt.Sprint(resp["message"]), http.StatusBadRequest)
+	err := message.Details()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	mes := message.ToDetailsModel()
@@ -80,9 +82,14 @@ func DeleteMessage(w http.ResponseWriter, r *http.Request) {
 	}
 	message.Id = uint(id)
 	token := strings.Split(r.Header.Get("Authorization"), " ")[1]
-	resp := message.Delete(token)
-	if resp["status"] == false {
-		http.Error(w, fmt.Sprint(resp["message"]), http.StatusBadRequest)
+	err := auth.CheckToken(message.Author.Token, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusForbidden)
+		return
+	}
+	err = message.Delete(token)
+	if err != nil{
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 }
@@ -104,9 +111,14 @@ func Like(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "You are not authorized", http.StatusUnauthorized)
 		return
 	}
-	resp := message.Like(token)
-	if resp["status"] == false {
-		http.Error(w, fmt.Sprint(resp["message"]), http.StatusBadRequest)
+	err := auth.CheckToken(message.Author.Token, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusForbidden)
+		return
+	}
+	err = message.Like(token)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	e := json.NewEncoder(w).Encode(message.ToDetailsModel())

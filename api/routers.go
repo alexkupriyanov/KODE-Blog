@@ -1,8 +1,8 @@
 package routes
 
 import (
+	"KODE-Blog/api/controllers"
 	"fmt"
-	"github.com/alexkupriyanov/KODE-Blog/api/controllers"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strings"
