@@ -16,6 +16,10 @@ func CreateMessage(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseMultipartForm(10 * 1024 * 1024)
 	message.Text = r.PostForm.Get("text")
 	message.Link.Link = r.PostForm.Get("link")
+	if r.Header.Get("Authorization") != "" {
+		http.Error(w, "Can't get authorization token", http.StatusUnauthorized)
+		return
+	}
 	message.Author.Token = strings.Split(r.Header.Get("Authorization"), " ")[1]
 	err := auth.CheckToken(message.Author.Token, r)
 	if err != nil {
@@ -81,6 +85,10 @@ func DeleteMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	message.Id = uint(id)
+	if r.Header.Get("Authorization") != "" {
+		http.Error(w, "Can't get authorization token", http.StatusUnauthorized)
+		return
+	}
 	token := strings.Split(r.Header.Get("Authorization"), " ")[1]
 	err := auth.CheckToken(message.Author.Token, r)
 	if err != nil {
@@ -106,6 +114,10 @@ func Like(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	message.Id = uint(id)
+	if r.Header.Get("Authorization") != "" {
+		http.Error(w, "Can't get authorization token", http.StatusUnauthorized)
+		return
+	}
 	token := strings.Split(r.Header.Get("Authorization"), " ")[1]
 	if token == "" {
 		http.Error(w, "You are not authorized", http.StatusUnauthorized)
