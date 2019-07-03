@@ -28,7 +28,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusForbidden)
 		return
 	}
-	var result map[string] interface{}
+	result := map[string] interface{} {"token":""}
 	result["token"] = token
 	_ = json.NewEncoder(w).Encode(result)
 	return
