@@ -29,7 +29,7 @@ type MessageViewListModel struct {
 	Author string            `json:"author,omitempty"`
 	Text   string            `json:"text,omitempty"`
 	Media  uint              `json:"mediaCount,omitempty"`
-	Link   LinkViewListModel `json:"link,omitempty"`
+	Link   string			 `json:"link,omitempty"`
 	Likes  int               `json:"likes,omitempty"`
 }
 
@@ -163,10 +163,8 @@ func (m *Media) ToOutputModel() MediaOutput {
 	return output
 }
 
-func (l *Link) ToListModel() LinkViewListModel {
-	var output LinkViewListModel
-	output.Link = l.Link
-	return output
+func (l *Link) ToListModel() string {
+	return l.Link
 }
 
 func (l *Link) ToDetailsModel() LinkViewDetailsModel {
