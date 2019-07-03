@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/alexkupriyanov/KODE-Blog/api/models"
-	"github.com/alexkupriyanov/KODE-Blog/api/utils"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
@@ -24,7 +23,7 @@ func CreateMessage(w http.ResponseWriter, r *http.Request) {
 	}
 	resp := message.Create(r)
 	if resp["status"] == false {
-		utils.Respond(w, resp)
+		http.Error(w, fmt.Sprint(resp["message"]), http.StatusBadRequest)
 		return
 	}
 	e := json.NewEncoder(w).Encode(message.ToListModel())
@@ -53,13 +52,13 @@ func GetMessageDetails(w http.ResponseWriter, r *http.Request) {
 		id, _ = strconv.Atoi(vars["id"])
 	}
 	if id == 0 {
-		utils.Respond(w, utils.Message(false, "Message not found"))
+		http.Error(w, "Message not found", http.StatusNotFound)
 		return
 	}
 	message := models.Message{Id: uint(id)}
 	resp := message.Details()
 	if resp["status"] == false {
-		utils.Respond(w, resp)
+		http.Error(w, fmt.Sprint(resp["message"]), http.StatusBadRequest)
 		return
 	}
 	mes := message.ToDetailsModel()
@@ -77,14 +76,14 @@ func DeleteMessage(w http.ResponseWriter, r *http.Request) {
 		id, _ = strconv.Atoi(vars["id"])
 	}
 	if id == 0 {
-		utils.Respond(w, utils.Message(false, "Message not found"))
+		http.Error(w, "Message not found", http.StatusNotFound)
 		return
 	}
 	message.Id = uint(id)
 	token := strings.Split(r.Header.Get("Authorization"), " ")[1]
 	resp := message.Delete(token)
 	if resp["status"] == false {
-		utils.Respond(w, resp)
+		http.Error(w, fmt.Sprint(resp["message"]), http.StatusBadRequest)
 		return
 	}
 }
@@ -97,7 +96,7 @@ func Like(w http.ResponseWriter, r *http.Request) {
 		id, _ = strconv.Atoi(vars["id"])
 	}
 	if id == 0 {
-		utils.Respond(w, utils.Message(false, "Message not found"))
+		http.Error(w, "Message not found", http.StatusNotFound)
 		return
 	}
 	message.Id = uint(id)
@@ -108,7 +107,7 @@ func Like(w http.ResponseWriter, r *http.Request) {
 	}
 	resp := message.Like(token)
 	if resp["status"] == false {
-		utils.Respond(w, resp)
+		http.Error(w, fmt.Sprint(resp["message"]), http.StatusBadRequest)
 		return
 	}
 	e := json.NewEncoder(w).Encode(message.ToDetailsModel())

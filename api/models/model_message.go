@@ -6,6 +6,7 @@ import (
 	"github.com/badoux/goscraper"
 	"github.com/joho/godotenv"
 	"io/ioutil"
+	"math"
 	"mime"
 	"net/http"
 	"os"
@@ -76,7 +77,7 @@ func (m *Message) Create(r *http.Request) map[string]interface{} {
 		v.MessageID = m.Id
 		GetDB().Create(&v)
 	}
-	return utils.Message(true, "Created")
+	return nil
 }
 
 func GetMessageList(page uint) []MessageViewListModel {
@@ -90,7 +91,7 @@ func GetMessageList(page uint) []MessageViewListModel {
 		fmt.Print(e)
 	}
 	messageCount, _ := strconv.Atoi(os.Getenv("message_per_list"))
-	GetDB().Preload("Media").Preload("Link").Limit(messageCount).Offset((page - 1) * uint(messageCount)).Find(&messages)
+	GetDB().Preload("Media").Preload("Link").Limit(messageCount).Offset(uint(math.Max(float64(page-1), 0)) * uint(messageCount)).Find(&messages)
 	for _, v := range messages {
 		result = append(result, v.ToListModel())
 	}
