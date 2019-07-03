@@ -71,14 +71,14 @@ var routes = Routes{
 	Route{
 		"Get page 1 message list",
 		strings.ToUpper("Get"),
-		"/messages/list",
+		"/message/list",
 		controllers.GetMessageList,
 	},
 
 	Route{
 		"Get page {page} message list",
 		strings.ToUpper("Get"),
-		"/messages/list/{page}",
+		"/message/list/{page}",
 		controllers.GetMessageList,
 	},
 

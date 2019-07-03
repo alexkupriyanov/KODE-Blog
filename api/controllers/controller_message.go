@@ -11,7 +11,6 @@ import (
 )
 
 func CreateMessage(w http.ResponseWriter, r *http.Request) {
-	//TODO: Change method in api documentation
 	var message models.Message
 	_ = r.ParseMultipartForm(10 * 1024 * 1024)
 	message.Text = r.PostForm.Get("text")
