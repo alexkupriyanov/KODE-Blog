@@ -39,7 +39,7 @@ func CreateMessage(w http.ResponseWriter, r *http.Request) {
 
 func GetMessageList(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	page := 0
+	page := 1
 	if len(vars["page"]) != 0 {
 		page, _ = strconv.Atoi(vars["page"])
 	}
