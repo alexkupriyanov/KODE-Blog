@@ -53,6 +53,10 @@ func GetMessageList(w http.ResponseWriter, r *http.Request) {
 func GetMessageDetails(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var id int
+	if vars["id"] == "list" {
+		GetMessageList(w, r)
+		return
+	}
 	if len(vars["id"]) != 0 {
 		id, _ = strconv.Atoi(vars["id"])
 	}
