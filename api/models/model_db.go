@@ -6,6 +6,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
 	"os"
+	"time"
 )
 
 var db *gorm.DB
@@ -27,15 +28,18 @@ func init() {
 	conn, err := gorm.Open(dbType, dbUri)
 	if err != nil {
 		fmt.Print(err)
+		time.Sleep(2 * time.Second)
+		os.Exit(4060)
 	}
 
 	db = conn
 	err = db.DB().Ping()
 	if err != nil {
 		fmt.Println(err)
+		time.Sleep(2 * time.Second)
+		os.Exit(4060)
 	}
 	db.Debug().AutoMigrate(&User{}, &Media{}, &Message{}, &Link{}, &Like{})
-	fmt.Println("Database started")
 }
 
 func GetDB() *gorm.DB {
