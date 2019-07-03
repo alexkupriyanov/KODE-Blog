@@ -4,12 +4,11 @@ services:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: mysql
-      MYSQL_DATABASE: kode-blog
+      MYSQL_DATABASE: "kode-blog"
     container_name: KODE-Blog-db
     tty: true
     volumes:
       - "./db:/var/lib/mysql"
-    restart: always
   app:
     build:
       context: .
@@ -17,5 +16,6 @@ services:
     ports:
       - "8080:8080"
     tty: true
+    restart: always
     depends_on:
       - db
