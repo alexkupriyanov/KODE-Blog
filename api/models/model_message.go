@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/badoux/goscraper"
-	"github.com/joho/godotenv"
 	"io/ioutil"
 	"math"
 	"mime"
@@ -85,10 +84,6 @@ func GetMessageList(page uint) []MessageViewListModel {
 	var result []MessageViewListModel
 	if page <= 0 {
 		return result
-	}
-	e := godotenv.Load()
-	if e != nil {
-		fmt.Print(e)
 	}
 	messageCount, _ := strconv.Atoi(os.Getenv("message_per_list"))
 	GetDB().Preload("Media").Preload("Link").Limit(messageCount).Offset(uint(math.Max(float64(page-1), 0)) * uint(messageCount)).Find(&messages)

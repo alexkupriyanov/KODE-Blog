@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"KODE-Blog/api/models"
 	"encoding/json"
-	"github.com/alexkupriyanov/KODE-Blog/api/models"
 	"net/http"
 	"strings"
 )

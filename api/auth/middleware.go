@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/alexkupriyanov/KODE-Blog/api/models"
+	"KODE-Blog/api/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 	"net/http"

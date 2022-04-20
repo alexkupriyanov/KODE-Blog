@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/alexkupriyanov/KODE-Blog/api"
+	"KODE-Blog/api"
 	"log"
 	"net/http"
 )

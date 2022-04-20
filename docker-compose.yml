@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   db:
     image: mysql:latest
@@ -8,14 +8,18 @@ services:
     container_name: KODE-Blog-db
     tty: true
     volumes:
-      - "./db:/var/lib/mysql"
+      - "KODE-DB:/var/lib/mysql"
   app:
     build:
       context: .
     container_name: KODE-Blog
+    env_file:
+      - .env
     ports:
       - "8080:8080"
-    tty: true
     restart: always
+
     depends_on:
       - db
+volumes:
+  KODE-DB:

@@ -4,10 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
-	"github.com/joho/godotenv"
 	"os"
 	"time"
 )
@@ -38,10 +36,6 @@ func (u *User) Create() error {
 }
 
 func (u *User) Login() (string,error) {
-	e := godotenv.Load()
-	if e != nil {
-		fmt.Print(e)
-	}
 	var user User
 	GetDB().First(&user, User{Username: u.Username, Password: getMD5Hash(u.Password)})
 	if user.ID <= 0 {
