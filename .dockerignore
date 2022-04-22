@@ -4,3 +4,4 @@ Dockerfile
 docker-compose.yml
 build.sh
 .dockerignore
+.git
