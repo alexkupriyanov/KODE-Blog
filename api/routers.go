@@ -116,4 +116,14 @@ var routes = Routes{
 		"/files/{file}",
 		controllers.Download,
 	},
+	Route{
+		"Healthcheck",
+		strings.ToUpper("Get"),
+		"/health",
+		func (w http.ResponseWriter, r *http.Request) {
+			_ = w
+			_ = r
+		    return
+		},
+	},
 }

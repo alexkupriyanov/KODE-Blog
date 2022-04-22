@@ -1,0 +1,6 @@
+.env
+.db-env
+Dockerfile
+docker-compose.yml
+build.sh
+.dockerignore
